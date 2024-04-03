@@ -1,0 +1,6 @@
+# Deploy_HUB :
+
+  - There are three services we need to make :
+     - Upload Service 
+     - Deployment Service
+     - Request Handler Service 
