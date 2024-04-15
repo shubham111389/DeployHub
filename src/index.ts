@@ -2,11 +2,19 @@ import fs from "fs";
 import express from "express";
 import cors from "cors";
 import simpleGit from "simple-git";
+import { createClient} from "redis";
+
 
 import { generate } from "./utils";
 import { getAllFiles } from "./file";
 import path from "path";
 import { uploadFile } from "./aws";
+
+const publisher = createClient();
+publisher.connect();
+
+const subscriber = createClient();
+subscriber.connect();
 
 const app = express();
 app.use(cors());
@@ -39,6 +47,10 @@ app.post("/deploy", async (req, res) => {
                 uploadFile(file.slice(__dirname.length + 1), file);
                 console.log(`File ${file} uploaded successfully.`);
             }
+            publisher.lPush("build-queue", id);
+            // INSERT => SQL
+            // .create => 
+            publisher.hSet("status", id, "uploaded");
 
             res.json({ id: id });
         } else {

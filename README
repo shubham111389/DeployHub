@@ -4,3 +4,22 @@
      - Upload Service 
      - Deployment Service
      - Request Handler Service 
+
+     -upload service :
+       - Install Node.js
+       - Initialise an empty typescript project
+       - Basic typescript configuration
+       - Add express , redis , aws-sdk , simple-git , cors as dependencies
+       - Initialize a simple express app in index listening on port3000-   
+       - Initialise an endpoint that the user will hit and send the repo url as input
+       - Create a function that randomly generates an id for this session. Call  it generate
+       - Use simple-git to clone the repo into a new folder (/out/id ).
+       - Write a function that gets the paths of all the files in the /out/id folder
+      - Write a function that uploads a file given a path to S3
+      - Iterate over all the files and upload them to S3 one by one (or together)
+       - Start redis locally { command in cmd for start redis "redis-server.exe"}
+      - Initialize a redis publisher
+      - Use redis queues to push the uploadId in the queue
+      - Also store the current video id’s status as uploaded .
+      - Expose a status endpoint that the frontend will poll to get back the status of a video. It needs to check redis for the current value.
+ 
