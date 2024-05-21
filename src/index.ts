@@ -9,6 +9,10 @@ import { generate } from "./utils";
 import { getAllFiles } from "./file";
 import path from "path";
 import { uploadFile } from "./aws";
+// index.ts or app.ts
+
+require('dotenv').config();
+
 
 const publisher = createClient();
 publisher.connect();
@@ -19,6 +23,7 @@ subscriber.connect();
 const app = express();
 app.use(cors());
 app.use(express.json());
+const DELAY_MS = 15000;
 
 // POSTMAN
 app.post("/deploy", async (req, res) => {
@@ -47,7 +52,11 @@ app.post("/deploy", async (req, res) => {
                 uploadFile(file.slice(__dirname.length + 1), file);
                 console.log(`File ${file} uploaded successfully.`);
             }
-            publisher.lPush("build-queue", id);
+            setTimeout(() => {
+                publisher.lPush("build-queue", id);
+                // INSERT => SQL
+               
+            }, DELAY_MS);
             // INSERT => SQL
             // .create => 
             publisher.hSet("status", id, "uploaded");
@@ -62,5 +71,12 @@ app.post("/deploy", async (req, res) => {
         res.status(500).json({ error: "Internal server error" });
     }
 });
+app.get("/status", async (req, res) => {
+    const id = req.query.id;
+    const response = await subscriber.hGet("status", id as string);
+    res.json({
+        status: response
+    })
+})
 
-app.listen(3000);
+app.listen(3005);

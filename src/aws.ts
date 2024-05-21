@@ -6,12 +6,19 @@ require("aws-sdk/lib/maintenance_mode_message").suppress = true;
 import fs from "fs";
 import path from "path";
 
+require('dotenv').config();
+
+
+
+
 const s3 = new S3({
-    accessKeyId: "a3c34598b4d918c8f1442787286ba705",
-    secretAccessKey: "029efee4494385993504d614d2850e178ab717d024f433718c7d6d3f3bbaa90b",
+    accessKeyId: process.env.ACCESS_KEY_ID,
+    
+    secretAccessKey: process.env.SECRET_ACCESS_KEY,
     endpoint: "https://f176de080d946997a747a188e04f44bc.r2.cloudflarestorage.com",
     
 })
+
 
 
 
